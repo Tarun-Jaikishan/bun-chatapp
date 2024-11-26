@@ -1,7 +1,37 @@
-import { Elysia } from "elysia";
+import { Context, Elysia } from "elysia";
 
-const app = new Elysia().get("/", () => "Hello Elysia").listen(3000);
+const app = new Elysia({
+  serve: {
+    maxRequestBodySize: 1024 * 1024 * 50, // 50MB
+  },
+});
+
+// Middlewares
+
+app.get("/api", (ctx) => {
+  return { message: `Welcome to Backend API` };
+});
+
+// API Not Found
+const handleNotFound = (ctx: Context) => {
+  ctx.set.status = 404;
+
+  return {
+    error: "API Not Found",
+  };
+};
+
+const PORT = 8080;
+
+app
+  .get("*", handleNotFound)
+  .post("*", handleNotFound)
+  .put("*", handleNotFound)
+  .delete("*", handleNotFound)
+  .patch("*", handleNotFound);
+
+app.listen(PORT);
 
 console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
+  `🦊 Elysia is running on "${PORT}" at http://${app.server?.hostname}:${app.server?.port}/api`
 );
