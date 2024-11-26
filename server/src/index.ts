@@ -6,10 +6,14 @@ const app = new Elysia({
   },
 });
 
-// Middlewares
-
 app.get("/api", (ctx) => {
   return { message: `Welcome to Backend API` };
+});
+
+app.ws("/ws", {
+  message(ws, message) {
+    ws.send("testing bro");
+  },
 });
 
 // API Not Found
