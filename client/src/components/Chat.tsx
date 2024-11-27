@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { IconButton, Tooltip } from "@mui/material";
 import { faker } from "@faker-js/faker";
 import { CiSearch } from "react-icons/ci";
@@ -18,6 +18,8 @@ export default function Chat({ name }: props) {
   const [text, setText] = useState("");
   const [chats, setChats] = useState<any[]>([]);
 
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
   const date = Date.now();
 
   useEffect(() => {
@@ -34,9 +36,15 @@ export default function Chat({ name }: props) {
     setText(e.target.value);
   };
 
-  const handleSend = () => {
+  const handleSend = (e: any) => {
+    e.preventDefault();
     setChats((prev) => [...prev, { type: "sender", text, date: Date.now() }]);
     setText("");
+
+    if (audioRef.current) {
+      audioRef.current.currentTime = 0;
+      audioRef.current.play();
+    }
   };
 
   return (
@@ -71,7 +79,10 @@ export default function Chat({ name }: props) {
         <br />
 
         {/* Chat Box */}
-        <div className="absolute bottom-0 left-0 right-0 flex gap-2 px-20 py-4 backdrop-filter backdrop-blur-md bg-white bg-opacity-30">
+        <form
+          onSubmit={handleSend}
+          className="absolute bottom-0 left-0 right-0 flex gap-2 px-20 py-4 backdrop-filter backdrop-blur-md bg-white bg-opacity-30"
+        >
           <div className="flex w-full">
             <div className="flex items-center justify-center bg-slate-200 pl-2 py-2 rounded-l-lg">
               <CiSearch className="text-2xl" />
@@ -82,19 +93,33 @@ export default function Chat({ name }: props) {
               value={text}
               placeholder="Your Message"
               className="bg-slate-200 px-2 py-2 rounded-r-lg text-black focus:outline-none w-full"
+              required
             />
           </div>
-          <Tooltip title="Send">
+          {text.length > 0 ? (
+            <Tooltip title="Send">
+              <button
+                type="submit"
+                className="text-white bg-purple-400 px-3 rounded-lg hover:bg-purple-500 duration-300"
+              >
+                <IoSend className="text-lg" />
+              </button>
+            </Tooltip>
+          ) : (
             <button
               type="button"
-              onClick={handleSend}
-              className="text-white bg-purple-400 px-3 rounded-lg hover:bg-purple-500 duration-300"
+              className="text-white bg-purple-400 px-3 rounded-lg duration-300"
+              disabled
             >
               <IoSend className="text-lg" />
             </button>
-          </Tooltip>
-        </div>
+          )}
+        </form>
       </div>
+
+      <audio className="hidden" ref={audioRef} controls>
+        <source src={"/audio/sound1.mp3"} type="audio/mpeg" />
+      </audio>
     </div>
   );
 }
