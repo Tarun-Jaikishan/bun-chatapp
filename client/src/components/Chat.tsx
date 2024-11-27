@@ -97,6 +97,8 @@ export default function Chat({ name }: props) {
           date={date}
         />
 
+        <ReceiverChat text="ok" date={date} />
+
         <br />
         <br />
 

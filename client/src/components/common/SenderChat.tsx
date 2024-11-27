@@ -8,10 +8,13 @@ type props = {
 export default function SenderChat({ text, date }: props) {
   return (
     <div className="flex justify-end">
-      <div className="bg-purple-400 text-white w-[20rem] p-3 rounded-lg">
+      <div className="bg-purple-400 text-white max-w-[30rem] p-3 rounded-lg">
         <p>{text}</p>
+        <div className="px-10">
+          <hr className="border-white my-2" />
+        </div>
         <div className="flex justify-end">
-          <p className="text-sm text-white">
+          <p className="text-xs text-white">
             {moment(date).format("DD MMM YYYY, hh:mm a")}
           </p>
         </div>
