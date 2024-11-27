@@ -50,6 +50,15 @@ export default function SideBar() {
           chatCount={0}
         />
 
+        <ContactPicker
+          name={`Test 1000`}
+          recentChat="  Lorem ipsum dolor sit amet consectetur adipisicing elit. Ut laboriosam
+          eligendi, quibusdam minima facilis laudantium, deserunt ab beatae vero
+          quia aliquid voluptatibus numquam obcaecati magni similique labore!
+          Sequi, repudiandae rerum?"
+          chatCount={0}
+        />
+
         {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13].map((item, i) => {
           return (
             <ContactPicker
@@ -63,6 +72,8 @@ export default function SideBar() {
             />
           );
         })}
+
+        <br />
       </div>
     </div>
   );

@@ -44,7 +44,7 @@ export default function ContactPicker({
           >
             {recentChat}
           </p>
-          {chatCount > 0 && (
+          {chatCount > 0 ? (
             <div
               className={`${
                 isOneDigit ? "w-6 h-6" : "w-6 h-6 px-1.5"
@@ -52,6 +52,8 @@ export default function ContactPicker({
             >
               {chatCount}
             </div>
+          ) : (
+            <div className="w-6 h-6"></div>
           )}
         </div>
       </div>
