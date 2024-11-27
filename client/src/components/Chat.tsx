@@ -1,7 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { IconButton, Tooltip } from "@mui/material";
+import { faker } from "@faker-js/faker";
 import { CiSearch } from "react-icons/ci";
 import { HiDotsVertical } from "react-icons/hi";
 import { IoSend } from "react-icons/io5";
@@ -15,11 +16,27 @@ type props = {
 
 export default function Chat({ name }: props) {
   const [text, setText] = useState("");
+  const [chats, setChats] = useState<any[]>([]);
 
   const date = Date.now();
 
+  useEffect(() => {
+    for (let i = 0; i < 10; i++) {
+      const type = faker.helpers.arrayElement(["sender", "receiver"]);
+      const text = faker.lorem.sentences();
+      const date = faker.date.recent();
+
+      setChats((prev) => [...prev, { type, text, date }]);
+    }
+  }, []);
+
   const handleChange = (e: any) => {
     setText(e.target.value);
+  };
+
+  const handleSend = () => {
+    setChats((prev) => [...prev, { type: "sender", text, date: Date.now() }]);
+    setText("");
   };
 
   return (
@@ -44,70 +61,11 @@ export default function Chat({ name }: props) {
       <div className="mt-5 space-y-2 overflow-y-auto h-[calc(100vh-120px)] hide-scrollbar">
         {/* Messages */}
 
-        <ReceiverChat
-          text="  Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt ut
-          ipsa accusamus officiis nesciunt debitis saepe excepturi ab et sint.
-          Placeat inventore quibusdam alias quaerat, facere aut libero odit
-          nemo."
-          date={date}
-        />
-        {/* <ReceiverChat
-          text="  Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt ut
-          ipsa accusamus officiis nesciunt debitis saepe excepturi ab et sint.
-          Placeat inventore quibusdam alias quaerat, facere aut libero odit
-          nemo."
-          date={date}
-        />
-
-        <SenderChat
-          text="  Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt ut
-          ipsa accusamus officiis nesciunt debitis saepe excepturi ab et sint.
-          Placeat inventore quibusdam alias quaerat, facere aut libero odit
-          nemo."
-          date={date}
-        /> */}
-
-        <SenderChat
-          text="  Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt ut
-          ipsa accusamus officiis nesciunt debitis saepe excepturi ab et sint.
-          Placeat inventore quibusdam alias quaerat, facere aut libero odit
-          nemo."
-          date={date}
-        />
-
-        <SenderChat
-          text="  Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt ut
-          ipsa accusamus officiis nesciunt debitis saepe excepturi ab et sint.
-          Placeat inventore quibusdam alias quaerat, facere aut libero odit
-          nemo."
-          date={date}
-        />
-
-        <SenderChat
-          text="  Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt ut
-          ipsa accusamus officiis nesciunt debitis saepe excepturi ab et sint.
-          Placeat inventore quibusdam alias quaerat, facere aut libero odit
-          nemo."
-          date={date}
-        />
-
-        <SenderChat
-          text="  Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt ut
-          ipsa accusamus officiis nesciunt debitis saepe excepturi ab et sint.
-          Placeat inventore quibusdam alias quaerat, facere aut libero odit
-          nemo."
-          date={date}
-        />
-
-        <ReceiverChat
-          text="  Lorem ipsum dolor sit amet consectetur adipisicing elit. Incidunt ut
-          ipsa accusamus officiis nesciunt debitis saepe excepturi ab et sint.
-          Placeat inventore quibusdam alias quaerat, facere aut libero odit
-          nemo."
-          date={date}
-        />
-
-        <ReceiverChat text="ok" date={date} />
+        {chats.map((item, i) => {
+          if (item.type === "receiver")
+            return <ReceiverChat text={item.text} date={item.date} key={i} />;
+          else return <SenderChat text={item.text} date={item.date} key={i} />;
+        })}
 
         <br />
         <br />
@@ -129,6 +87,7 @@ export default function Chat({ name }: props) {
           <Tooltip title="Send">
             <button
               type="button"
+              onClick={handleSend}
               className="text-white bg-purple-400 px-3 rounded-lg hover:bg-purple-500 duration-300"
             >
               <IoSend className="text-lg" />
