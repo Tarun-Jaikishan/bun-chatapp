@@ -31,7 +31,7 @@ export default function ContactPicker({
       )}
     >
       <Image src={profile} alt="profile" className="w-16 rounded-lg" />
-      <div className="pl-3">
+      <div className="px-3">
         <div className="flex items-center justify-between">
           <h3 className="font-semibold">{name}</h3>
           <h5 className="text-slate-400 text-sm">5m</h5>

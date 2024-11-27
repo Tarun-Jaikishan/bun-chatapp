@@ -1,6 +1,7 @@
 "use client";
 
-import { IconButton } from "@mui/material";
+import { useState } from "react";
+import { IconButton, Tooltip } from "@mui/material";
 import { CiSearch } from "react-icons/ci";
 import { HiDotsVertical } from "react-icons/hi";
 import { IoSend } from "react-icons/io5";
@@ -13,7 +14,13 @@ type props = {
 };
 
 export default function Chat({ name }: props) {
+  const [text, setText] = useState("");
+
   const date = Date.now();
+
+  const handleChange = (e: any) => {
+    setText(e.target.value);
+  };
 
   return (
     <div className="p-5 relative h-screen">
@@ -21,9 +28,12 @@ export default function Chat({ name }: props) {
       <div className="flex justify-between">
         <h1 className="text-3xl font-semibold">{name}</h1>
         <div className="flex items-center gap-3">
-          <IconButton>
-            <CiSearch />
-          </IconButton>
+          <Tooltip title="Search">
+            <IconButton>
+              <CiSearch />
+            </IconButton>
+          </Tooltip>
+
           <IconButton>
             <HiDotsVertical />
           </IconButton>
@@ -110,17 +120,20 @@ export default function Chat({ name }: props) {
             </div>
             <input
               type="text"
+              onChange={handleChange}
+              value={text}
               placeholder="Your Message"
               className="bg-slate-200 px-2 py-2 rounded-r-lg text-black focus:outline-none w-full"
             />
           </div>
-          <button
-            type="button"
-            className="text-white bg-purple-400 px-3 rounded-lg hover:bg-purple-500 duration-300"
-            title="Add Contact"
-          >
-            <IoSend className="text-lg" title="Send" />
-          </button>
+          <Tooltip title="Send">
+            <button
+              type="button"
+              className="text-white bg-purple-400 px-3 rounded-lg hover:bg-purple-500 duration-300"
+            >
+              <IoSend className="text-lg" />
+            </button>
+          </Tooltip>
         </div>
       </div>
     </div>
